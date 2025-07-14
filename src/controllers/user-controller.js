@@ -44,7 +44,27 @@ const get = async (req, res) => {
     }
 }
 
+const signIn = async (req, res) => {
+    try {
+        const response = await userService.signIn(req.body.email, req.body.password);
+        return res.status(SuccessCodes.OK).json({
+            data: response,
+            success: true,
+            message: 'Successfully signIn',
+            error: {}
+        });
+    } catch (error) {
+        return res.status(ServerErrorCodes.INTERNAL_SERVER_ERROR).json({
+            data: {},
+            success: false,
+            message: 'Error while singIn user',
+            error: error
+        });
+    }
+}
+
 module.exports = {
     create,
-    get
+    get,
+    signIn
 }

@@ -19,6 +19,28 @@ class UserService {
         }
     }
 
+    async signIn(email, plainPassword) {
+        try {
+            // fetch user with email
+            const user = await this.userRepository.getByEmail(email);
+            // compare plainPassword and encrypted password
+            const passwordMatch = this.checkPassword(plainPassword, user.password);
+
+            if (!passwordMatch) {
+                console.log("Password does not match");
+                throw { error: "Incorrect Password" };
+            }
+
+            // if password match then create token and send to the user
+            const newToken = this.createToken({email: user.email, id: user.id});
+            return newToken;
+
+        } catch (error) {
+            console.log("Something went wrong while signIn in user service");
+            throw { error };
+        }
+    }
+
     // async getById(userId) {
     //     try {
     //         const user = await this.userRepository.getById(userId);
