@@ -10,4 +10,6 @@ router.post('/signin', AuthMiddlewares.validateUserAuth, UserController.signIn);
 
 router.get('/isAuthenticated', UserController.isAuthenticated);
 
+router.get('/isAdmin', AuthMiddlewares.validateisAdmin, UserController.isAdmin);
+
 module.exports = router;
