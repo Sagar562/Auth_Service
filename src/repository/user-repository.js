@@ -1,4 +1,5 @@
 const { User, Role } = require('../models/index');
+const ValidationError = require('../utils/validation-errors');
 
 class UserRepository {
     async createUser(data) {
@@ -6,8 +7,14 @@ class UserRepository {
             const user = await User.create(data);
             return user;
         } catch (error) {
+            // console.log(error.errors);
+            if (error.name === 'SequelizeValidationError') {
+                let validationError = new ValidationError(error);
+                throw validationError;
+            }
+            
             console.log("Something went wrong while creating user in user repository");
-            throw { error };
+            throw error;
         }
     }
 
@@ -19,7 +26,7 @@ class UserRepository {
             return response;
         } catch (error) {
             console.log("Something went wrong while deleting user in user repository");
-            throw { error };
+            throw error;
         }
     }
 
@@ -57,7 +64,7 @@ class UserRepository {
                     name: 'ADMIN'
                 }
             });
-            return user.hasRole(adminRole);
+            return user.hasRole(admin)
         } catch (error) {
             console.log("Something went wrong in user repository");
             throw { error };

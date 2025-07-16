@@ -16,11 +16,11 @@ const create = async (req, res) => {
             error: {}
         });
     } catch (error) {
-        return res.status(ServerErrorCodes.INTERNAL_SERVER_ERROR).json({
+        return res.status(error.statusCode).json({
             data: {},
             success: false,
-            message: 'Error while creating user in controller',
-            error: error
+            message: error.message,
+            error: error.explanation
         });
     }
 }
